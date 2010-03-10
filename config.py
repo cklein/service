@@ -97,8 +97,7 @@ def main():
         parser.error('No template file given')
     
     templates = globals().get('load_%s' % options.format)(args[1])
-    print templates
-    #create(templates)
+    create(templates)
 
 
 if __name__ == '__main__':
