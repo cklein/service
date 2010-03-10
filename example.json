@@ -1,0 +1,1 @@
+{"logserver": {"run": "python %(BASEDIR)s/camserver/server/camserver\n", "vars": {"BASEDIR": "/Users/cklein/Desktop/huLOG/service/camserver"}, "loguser": "cklein", "run_prologue": ". %(BASEDIR)s/pyenv/bin/activate\n", "env": {"PYTHONPATH": "%(BASEDIR)s"}, "directory": "/Users/cklein/Desktop/huLOG/service/camserver", "user": "cklein"}}

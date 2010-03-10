@@ -1,0 +1,12 @@
+logserver:
+  directory: /Users/cklein/Desktop/huLOG/service/camserver
+  env: {PYTHONPATH: '%(BASEDIR)s'}
+  loguser: cklein
+  run: 'python %(BASEDIR)s/camserver/server/camserver
+
+    '
+  run_prologue: '. %(BASEDIR)s/pyenv/bin/activate
+
+    '
+  user: cklein
+  vars: {BASEDIR: /Users/cklein/Desktop/huLOG/service/camserver}
