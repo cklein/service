@@ -1,0 +1,31 @@
+Metadata-Version: 1.0
+Name: service
+Version: 0.1
+Summary: Supervise directory structure builder
+Home-page: http://github.com/cklein/service
+Author: Christian Klein
+Author-email: c.klein@hudora.de
+License: BSD
+Description: 
+        
+        Status and License
+        ------------------
+        
+        ``service`` is a Python port and extension of SuperScript Technology's
+        service-config tool
+        <http://www.superscript.com/service-config/intro.html>`_
+        
+        It is written by Christian Klein and licensed under an
+        `BSD-style permissive license <license.html>`_.
+        
+        What It Does
+        ------------
+        
+        ``service`` is a tool to create isolated Python environments.
+        
+Keywords:
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+
