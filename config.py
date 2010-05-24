@@ -4,6 +4,9 @@ config.py
 
 Created by Christian Klein on 2010-03-10.
 Copyright (c) 2010 Christian Klein. All rights reserved.
+
+service/config.py is meant as a replacement for service-config
+to create the directory structures for daemontools (http://cr.yp.to/daemontools).
 '''
 
 import sys
@@ -40,11 +43,32 @@ def makelog(directory, loguser):
 
 
 def create(templates):
-    '''Create directory structures'''
+    '''
+    Create the directory structure
     
-    # create directory structure:
+    This function creates the directory structure for each defined template.
+    The path stored in template['directory'] will be created, with all
+    parent directories if they do not exist yet.
+    In the given directory, a script 'run' will be created that will be executed
+    by supervise (http://cr.yp.to/daemontools/supervise.html).
+    
+    The run script will be build using template['run_prologue'] and
+    template['run'].
+    The value of 'run_prologue' is a helper for executing stuff before
+    the actual command is executed, like setting PATH which is not possible
+    with the envdir program.
+    
+    Additionally, the subdirectories 'env' and 'log' will be created.
+    The key value pairs of template['env'] will be stored in the 'env' directory
+    with key being the filename of a file with the value as content.
+    'env' is to be used as a directory for envdir (http://cr.yp.to/daemontools/envdir.html).
+    
+    The subdirectory 'log' is a directory structure for logging with
+    multilog (http://cr.yp.to/daemontools/multilog.html).
+    '''
+    
     for name, template in templates.items():
-        vars = template.get('vars', {})
+        fmtvars = template.get('vars', {})
         try:
             directory = template['directory']
             for subdir in 'env', 'log':
@@ -57,7 +81,7 @@ def create(templates):
             template['env'].update({'UID': str(uid), 'GID': str(gid)})
         
             for variable, value in template['env'].items():
-                filename = os.path.join(directory, 'env', variable % vars)
+                filename = os.path.join(directory, 'env', variable % fmtvars)
                 open(filename, 'w').write(value)
                 os.chmod(filename, 0644)
         
@@ -66,9 +90,14 @@ def create(templates):
             run = open(fname, 'w')
             run.write('#!/bin/sh\n')
             if 'run_prologue' in template:
-                run.write(template['run_prologue'] % vars)
+                run.write(template['run_prologue'] % fmtvars)
+            if not template['run_prologue'].endswith('\\n'):
+                run.write('\\n')
+            
             run.write('exec 2>&1\nexec envdir %s/env \\\n' % directory)
-            run.write(template['run'] % vars)
+            run.write(template['run'] % fmtvars)
+            if not template['run'].endswith('\\n'):
+                run.write('\\n')
             os.chmod(fname, 0755)
         except (KeyError, OSError), exception:
             sys.stderr.write("Could not create service directories: %s\n" % exception)
